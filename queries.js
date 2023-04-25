@@ -24,7 +24,19 @@ const viewRoles = async () => {
     }
 }
 
+// Function with query to view all employees
+const viewEmployees = async () => {
+    const query = 'SELECT * FROM employee;';
+    try {
+        const [result] = await connection.query(query);
+        console.table(result);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     viewDepartments,
-    viewRoles
+    viewRoles,
+    viewEmployees
 };

@@ -3,7 +3,8 @@ const inquirer = require('inquirer');
 const connection = require('./config/connection.js');
 const {
     viewDepartments,
-    viewRoles
+    viewRoles,
+    viewEmployees
 } = require('./queries.js');
 
 // Function to initialize app with question prompt
@@ -53,6 +54,9 @@ function init() {
                 break;
             case 'viewRoles':
                 viewRoles();
+                break;
+            case 'viewEmployees':
+                viewEmployees();
                 break;
         }
             
