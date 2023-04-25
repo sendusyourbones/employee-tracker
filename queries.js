@@ -13,6 +13,18 @@ const viewDepartments = async () => {
     }
 };
 
+// Function with query to view all roles
+const viewRoles = async () => {
+    const query = 'SELECT * FROM role;';
+    try {
+        const [result] = await connection.query(query);
+        console.table(result);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
-    viewDepartments
+    viewDepartments,
+    viewRoles
 };

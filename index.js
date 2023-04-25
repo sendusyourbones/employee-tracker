@@ -1,7 +1,10 @@
 // Require statements for functionality in this file
 const inquirer = require('inquirer');
 const connection = require('./config/connection.js');
-const {viewDepartments} = require('./queries.js');
+const {
+    viewDepartments,
+    viewRoles
+} = require('./queries.js');
 
 // Function to initialize app with question prompt
 function init() {
@@ -47,6 +50,9 @@ function init() {
         switch (response.action) {
             case 'viewDepartments':
                 viewDepartments();
+                break;
+            case 'viewRoles':
+                viewRoles();
                 break;
         }
             
