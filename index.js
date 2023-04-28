@@ -4,8 +4,27 @@ const connection = require('./config/connection.js');
 const {
     viewDepartments,
     viewRoles,
-    viewEmployees
+    viewEmployees,
+    addDepartment,
 } = require('./queries.js');
+const {
+    validateDepartment
+} = require('./validateInput.js');
+
+// Function to ask for department name
+function getDepartment() {
+    inquirer.prompt([
+        {
+            name: 'deptName',
+            message: 'Please enter the department name here:',
+            type: 'input',
+            validate: validateDepartment
+        }
+    ]).then((response) => {
+        const { deptName } = response;
+        addDepartment(deptName);
+    });
+}
 
 // Function to initialize app with question prompt
 function init() {
@@ -57,6 +76,9 @@ function init() {
                 break;
             case 'viewEmployees':
                 viewEmployees();
+                break;
+            case 'addDepartment':
+                getDepartment();
                 break;
         }
             

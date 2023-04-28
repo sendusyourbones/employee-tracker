@@ -35,8 +35,22 @@ const viewEmployees = async () => {
     }
 }
 
+// Function with query to add department
+const addDepartment = async (name) => {
+    try {
+        const query = 'INSERT INTO department (name) VALUES (?);';
+        const [result] = await connection.query(query, [name]);
+        const resultQuery = `SELECT * FROM department WHERE id = ${result.insertId};`;
+        const [addedDept] = await connection.query(resultQuery);
+        console.log(`Added ${addedDept[0].name} to the database`);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     viewDepartments,
     viewRoles,
-    viewEmployees
+    viewEmployees,
+    addDepartment,
 };
