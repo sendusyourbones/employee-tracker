@@ -11,6 +11,7 @@ const {
     showRoleList,
     showEmployeeList,
     addEmployee,
+    updateEmployeeRole,
 } = require('./queries.js');
 const {
     validateNotNull,
@@ -18,7 +19,7 @@ const {
 } = require('./validateInput.js');
 
 // Function to ask for department name
-function getDepartment() {
+function getDepartmentInfo() {
     inquirer.prompt([
         {
             name: 'deptName',
@@ -33,7 +34,7 @@ function getDepartment() {
 }
 
 // Function to ask for role information
-function getRole() {
+function getRoleInfo() {
     inquirer.prompt([
         {
             name: 'roleName',
@@ -54,7 +55,6 @@ function getRole() {
             choices: showDeptList
         }
     ]).then((response) => {
-        console.log(response);
         const {
             roleName,
             salary,
@@ -65,7 +65,7 @@ function getRole() {
 }
 
 // Function to ask for employee information
-function getEmployee() {
+function getEmployeeInfo() {
     inquirer.prompt([
         {
             name: 'firstName',
@@ -92,7 +92,6 @@ function getEmployee() {
             choices: showEmployeeList
         }
     ]).then((response) => {
-        console.log(response);
         const {
             firstName,
             lastName,
@@ -100,6 +99,30 @@ function getEmployee() {
             manager
         } = response;
         addEmployee(firstName, lastName, role, manager);
+    });
+}
+
+// Function to ask which employee's role to update
+function showEmployeeChoices() {
+    inquirer.prompt([
+        {
+            name: 'employeeId',
+            message: "Which employee's role do you want to update?",
+            type: 'list',
+            choices: showEmployeeList
+        },
+        {
+            name: 'roleId',
+            message: 'Which role do you want to assign to the selected employee?',
+            type: 'list',
+            choices: showRoleList
+        }
+    ]).then((response) => {
+        const {
+            employeeId,
+            roleId
+        } = response;
+        updateEmployeeRole(employeeId, roleId);
     });
 }
 
@@ -142,8 +165,6 @@ function init() {
             ]
         }
     ]).then((response) => {
-        console.log(response);
-
         switch (response.action) {
             case 'viewDepartments':
                 viewDepartments();
@@ -155,13 +176,16 @@ function init() {
                 viewEmployees();
                 break;
             case 'addDepartment':
-                getDepartment();
+                getDepartmentInfo();
                 break;
             case 'addRole':
-                getRole();
+                getRoleInfo();
                 break;
             case 'addEmployee':
-                getEmployee();
+                getEmployeeInfo();
+                break;
+            case 'updateEmpRole':
+                showEmployeeChoices();
                 break;
         }
     });

@@ -98,17 +98,17 @@ const showRoleList = async () => {
 };
 
 // Function to display current employees as manager options when adding an employee
-const showEmployeeList = async () => {
+const showEmployeeList = async (currentAnswers) => {
     const query = 'SELECT * FROM employee;';
     try {
         const [result] = await connection.query(query);
-        console.log('result', result);
-        let employeesArray = [
-            {
+        let employeesArray = [];
+        if (currentAnswers.firstName) {
+            employeesArray[0] = {
                 name: 'None',
                 value: null
             }
-        ];
+        }
         result.forEach((element) => {
             const employeeObject = {};
             employeeObject.name = `${element.first_name} ${element.last_name}`;
@@ -136,6 +136,22 @@ const addEmployee = async (firstName, lastName, roleId, managerId) => {
     }
 };
 
+// Function to update an employee's role
+const updateEmployeeRole = async (employeeId, roleId) => {
+    try {
+        const updateQuery = `UPDATE employee SET role_id = ${roleId} WHERE id = ${employeeId};`;
+        const [updateResult] = await connection.query(updateQuery);
+        console.log('updateResult', updateResult);
+        
+        const updatedEmployeeQuery = `SELECT * FROM employee WHERE id = ${employeeId};`;
+        const [updatedEmployee] = await connection.query(updatedEmployeeQuery);
+
+        console.log(`Updated ${updatedEmployee[0].first_name} ${updatedEmployee[0].last_name}'s role`);
+    } catch (error) {
+        console.log(error);
+    }  
+};
+
 module.exports = {
     viewDepartments,
     viewRoles,
@@ -146,4 +162,5 @@ module.exports = {
     showRoleList,
     showEmployeeList,
     addEmployee,
+    updateEmployeeRole,
 };
