@@ -22,7 +22,7 @@ const viewRoles = async () => {
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 // Function with query to view all employees
 const viewEmployees = async () => {
@@ -33,7 +33,7 @@ const viewEmployees = async () => {
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 // Function to add department to database
 const addDepartment = async (name) => {
@@ -43,12 +43,12 @@ const addDepartment = async (name) => {
 
         const resultQuery = `SELECT * FROM department WHERE id = ${result.insertId};`;
         const [addedDept] = await connection.query(resultQuery);
-        
+
         console.log(`Added ${addedDept[0].name} to the database`);
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 // Function to display current departments as options when adding a role
 const showDeptList = async () => {
@@ -59,7 +59,7 @@ const showDeptList = async () => {
     } catch (error) {
         return error;
     }
-}
+};
 
 // Function to add role to database
 const addRole = async (title, salary, department) => {
@@ -77,7 +77,64 @@ const addRole = async (title, salary, department) => {
     } catch (error) {
         console.log(error);
     }
-}
+};
+
+// Function to display current roles as options when adding an employee
+const showRoleList = async () => {
+    const query = 'SELECT * FROM role;';
+    try {
+        const [result] = await connection.query(query);
+        let rolesArray = [];
+        result.forEach((element) => {
+            const roleObject = {};
+            roleObject.name = element.title;
+            roleObject.value = element.id;
+            rolesArray.push(roleObject);
+        });
+        return rolesArray;
+    } catch (error) {
+        return error;
+    }
+};
+
+// Function to display current employees as manager options when adding an employee
+const showEmployeeList = async () => {
+    const query = 'SELECT * FROM employee;';
+    try {
+        const [result] = await connection.query(query);
+        console.log('result', result);
+        let employeesArray = [
+            {
+                name: 'None',
+                value: null
+            }
+        ];
+        result.forEach((element) => {
+            const employeeObject = {};
+            employeeObject.name = `${element.first_name} ${element.last_name}`;
+            employeeObject.value = element.id;
+            employeesArray.push(employeeObject);
+        });
+        return employeesArray;
+    } catch (error) {
+        return error;
+    }
+};
+
+// Function to add employee to database
+const addEmployee = async (firstName, lastName, roleId, managerId) => {
+    try {
+        const addEmployeeQuery = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${firstName}', '${lastName}', ${roleId}, ${managerId});`;
+        const [addEmployeeResult] = await connection.query(addEmployeeQuery);
+
+        const addedEmployeeQuery = `SELECT * FROM employee WHERE id = ${addEmployeeResult.insertId};`;
+        const [addedEmployee] = await connection.query(addedEmployeeQuery);
+
+        console.log(`Added ${addedEmployee[0].first_name} ${addedEmployee[0].last_name} to the database`);
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 module.exports = {
     viewDepartments,
@@ -86,4 +143,7 @@ module.exports = {
     addDepartment,
     showDeptList,
     addRole,
+    showRoleList,
+    showEmployeeList,
+    addEmployee,
 };

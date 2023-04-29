@@ -7,7 +7,10 @@ const {
     viewEmployees,
     addDepartment,
     showDeptList,
-    addRole
+    addRole,
+    showRoleList,
+    showEmployeeList,
+    addEmployee,
 } = require('./queries.js');
 const {
     validateNotNull,
@@ -30,7 +33,6 @@ function getDepartment() {
 }
 
 // Function to ask for role information
-// name, salary, and department
 function getRole() {
     inquirer.prompt([
         {
@@ -39,7 +41,6 @@ function getRole() {
             type: 'input',
             validate: validateNotNull
         },
-        // This gives back a string
         {
             name: 'salary',
             message: 'Please enter the salary here:',
@@ -60,6 +61,45 @@ function getRole() {
             department
         } = response;
         addRole(roleName, salary, department);
+    });
+}
+
+// Function to ask for employee information
+function getEmployee() {
+    inquirer.prompt([
+        {
+            name: 'firstName',
+            message: 'Please enter the first name:',
+            type: 'input',
+            validate: validateNotNull
+        },
+        {
+            name: 'lastName',
+            message: 'Please enter the last name:',
+            type: 'input',
+            validate: validateNotNull
+        },
+        {
+            name: 'role',
+            message: 'Which role does the employee hold?',
+            type: 'list',
+            choices: showRoleList
+        },
+        {
+            name: 'manager',
+            message: 'Who is their manager?',
+            type: 'list',
+            choices: showEmployeeList
+        }
+    ]).then((response) => {
+        console.log(response);
+        const {
+            firstName,
+            lastName,
+            role,
+            manager
+        } = response;
+        addEmployee(firstName, lastName, role, manager);
     });
 }
 
@@ -119,6 +159,9 @@ function init() {
                 break;
             case 'addRole':
                 getRole();
+                break;
+            case 'addEmployee':
+                getEmployee();
                 break;
         }
     });
