@@ -6,9 +6,12 @@ const {
     viewRoles,
     viewEmployees,
     addDepartment,
+    showDeptList,
+    addRole
 } = require('./queries.js');
 const {
-    validateDepartment
+    validateNotNull,
+    validateSalary,
 } = require('./validateInput.js');
 
 // Function to ask for department name
@@ -18,11 +21,45 @@ function getDepartment() {
             name: 'deptName',
             message: 'Please enter the department name here:',
             type: 'input',
-            validate: validateDepartment
+            validate: validateNotNull
         }
     ]).then((response) => {
         const { deptName } = response;
         addDepartment(deptName);
+    });
+}
+
+// Function to ask for role information
+// name, salary, and department
+function getRole() {
+    inquirer.prompt([
+        {
+            name: 'roleName',
+            message: 'Please enter the role name here:',
+            type: 'input',
+            validate: validateNotNull
+        },
+        // This gives back a string
+        {
+            name: 'salary',
+            message: 'Please enter the salary here:',
+            type: 'input',
+            validate: validateSalary
+        },
+        {
+            name: 'department',
+            message: 'Which department does the role belong to?',
+            type: 'list',
+            choices: showDeptList
+        }
+    ]).then((response) => {
+        console.log(response);
+        const {
+            roleName,
+            salary,
+            department
+        } = response;
+        addRole(roleName, salary, department);
     });
 }
 
@@ -80,8 +117,10 @@ function init() {
             case 'addDepartment':
                 getDepartment();
                 break;
+            case 'addRole':
+                getRole();
+                break;
         }
-            
     });
 }
 
