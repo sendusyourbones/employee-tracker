@@ -19,23 +19,22 @@ const {
 } = require('./validateInput.js');
 
 // Function to ask for department name
-function getDepartmentInfo() {
-    inquirer.prompt([
+const getDepartmentInfo = async () => {
+    const response = await inquirer.prompt([
         {
             name: 'deptName',
             message: 'Please enter the department name here:',
             type: 'input',
             validate: validateNotNull
         }
-    ]).then((response) => {
-        const { deptName } = response;
-        addDepartment(deptName);
-    });
+    ]);
+    const { deptName } = response;
+    await addDepartment(deptName);
 }
 
 // Function to ask for role information
-function getRoleInfo() {
-    inquirer.prompt([
+const getRoleInfo = async () => {
+    const response = await inquirer.prompt([
         {
             name: 'roleName',
             message: 'Please enter the role name here:',
@@ -54,19 +53,20 @@ function getRoleInfo() {
             type: 'list',
             choices: showDeptList
         }
-    ]).then((response) => {
-        const {
-            roleName,
-            salary,
-            department
-        } = response;
-        addRole(roleName, salary, department);
-    });
+    ]);
+
+    const {
+        roleName,
+        salary,
+        department
+    } = response;
+
+    await addRole(roleName, salary, department);
 }
 
 // Function to ask for employee information
-function getEmployeeInfo() {
-    inquirer.prompt([
+const getEmployeeInfo = async () => {
+    const response = await inquirer.prompt([
         {
             name: 'firstName',
             message: 'Please enter the first name:',
@@ -91,20 +91,21 @@ function getEmployeeInfo() {
             type: 'list',
             choices: showEmployeeList
         }
-    ]).then((response) => {
-        const {
-            firstName,
-            lastName,
-            role,
-            manager
-        } = response;
-        addEmployee(firstName, lastName, role, manager);
-    });
+    ]);
+
+    const {
+        firstName,
+        lastName,
+        role,
+        manager
+    } = response;
+
+    await addEmployee(firstName, lastName, role, manager);
 }
 
 // Function to ask which employee's role to update
-function showEmployeeChoices() {
-    inquirer.prompt([
+const showEmployeeChoices = async () => {
+    const response = await inquirer.prompt([
         {
             name: 'employeeId',
             message: "Which employee's role do you want to update?",
@@ -117,18 +118,19 @@ function showEmployeeChoices() {
             type: 'list',
             choices: showRoleList
         }
-    ]).then((response) => {
-        const {
-            employeeId,
-            roleId
-        } = response;
-        updateEmployeeRole(employeeId, roleId);
-    });
+    ]);
+    
+    const {
+        employeeId,
+        roleId
+    } = response;
+    
+    await updateEmployeeRole(employeeId, roleId);
 }
 
 // Function to initialize app with question prompt
-function init() {
-    inquirer.prompt([
+const init = async () => {
+    const response = await inquirer.prompt([
         {
             name: 'action',
             message: 'What would you like to do?',
@@ -164,31 +166,32 @@ function init() {
                 }
             ]
         }
-    ]).then((response) => {
-        switch (response.action) {
-            case 'viewDepartments':
-                viewDepartments();
-                break;
-            case 'viewRoles':
-                viewRoles();
-                break;
-            case 'viewEmployees':
-                viewEmployees();
-                break;
-            case 'addDepartment':
-                getDepartmentInfo();
-                break;
-            case 'addRole':
-                getRoleInfo();
-                break;
-            case 'addEmployee':
-                getEmployeeInfo();
-                break;
-            case 'updateEmpRole':
-                showEmployeeChoices();
-                break;
-        }
-    });
+    ]);
+
+    switch (response.action) {
+        case 'viewDepartments':
+            await viewDepartments();
+            break;
+        case 'viewRoles':
+            await viewRoles();
+            break;
+        case 'viewEmployees':
+            await viewEmployees();
+            break;
+        case 'addDepartment':
+            await getDepartmentInfo();
+            break;
+        case 'addRole':
+            await getRoleInfo();
+            break;
+        case 'addEmployee':
+            await getEmployeeInfo();
+            break;
+        case 'updateEmpRole':
+            await showEmployeeChoices();
+            break;
+    }
+    init();
 }
 
 init();

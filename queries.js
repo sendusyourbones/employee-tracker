@@ -141,7 +141,6 @@ const updateEmployeeRole = async (employeeId, roleId) => {
     try {
         const updateQuery = `UPDATE employee SET role_id = ${roleId} WHERE id = ${employeeId};`;
         const [updateResult] = await connection.query(updateQuery);
-        console.log('updateResult', updateResult);
         
         const updatedEmployeeQuery = `SELECT * FROM employee WHERE id = ${employeeId};`;
         const [updatedEmployee] = await connection.query(updatedEmployeeQuery);
