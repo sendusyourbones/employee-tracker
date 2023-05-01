@@ -15,7 +15,9 @@ const viewDepartments = async () => {
 
 // Function with query to view all roles
 const viewRoles = async () => {
-    const query = 'SELECT * FROM role;';
+    const query =   `SELECT role.id, role.title, role.salary, department.name AS department 
+                    FROM role 
+                    INNER JOIN department ON role.department_id = department.id;`;
     try {
         const [result] = await connection.query(query);
         console.table(result);
@@ -26,7 +28,12 @@ const viewRoles = async () => {
 
 // Function with query to view all employees
 const viewEmployees = async () => {
-    const query = 'SELECT * FROM employee;';
+    const query =   `SELECT E.id, E.first_name, E.last_name, role.title, department.name AS department, role.salary, CONCAT(M.first_name, ' ', M.last_name) AS manager
+                    FROM employee E
+                    INNER JOIN role ON E.role_id = role.id
+                    INNER JOIN department ON role.department_id = department.id
+                    LEFT JOIN employee M
+                    ON E.manager_id = M.id;`;
     try {
         const [result] = await connection.query(query);
         console.table(result);
