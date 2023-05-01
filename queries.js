@@ -45,8 +45,8 @@ const viewEmployees = async () => {
 // Function to add department to database
 const addDepartment = async (name) => {
     try {
-        const query = 'INSERT INTO department (name) VALUES (?);';
-        const [result] = await connection.query(query, [name]);
+        const query = `INSERT INTO department (name) VALUES ('${name}');`;
+        const [result] = await connection.query(query);
 
         const resultQuery = `SELECT * FROM department WHERE id = ${result.insertId};`;
         const [addedDept] = await connection.query(resultQuery);
@@ -69,9 +69,9 @@ const showDeptList = async () => {
 };
 
 // Function to add role to database
-const addRole = async (title, salary, department) => {
+const addRole = async (title, salary, departmentId) => {
     try {
-        const deptIdQuery = `SELECT id FROM department WHERE name = '${department}';`;
+        const deptIdQuery = `SELECT id FROM department WHERE name = '${departmentId}';`;
         const [deptIdResult] = await connection.query(deptIdQuery);
 
         const addDeptQuery = `INSERT INTO role (title, salary, department_id) VALUES ('${title}', ${salary}, ${deptIdResult[0].id});`;

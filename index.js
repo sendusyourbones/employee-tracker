@@ -1,6 +1,6 @@
 // Require statements for functionality in this file
 const inquirer = require('inquirer');
-const connection = require('./config/connection.js');
+
 const {
     viewDepartments,
     viewRoles,
@@ -13,6 +13,7 @@ const {
     addEmployee,
     updateEmployeeRole,
 } = require('./queries.js');
+
 const {
     validateNotNull,
     validateSalary,
@@ -36,7 +37,7 @@ const getDepartmentInfo = async () => {
 const getRoleInfo = async () => {
     const response = await inquirer.prompt([
         {
-            name: 'roleName',
+            name: 'title',
             message: 'Please enter the role name here:',
             type: 'input',
             validate: validateNotNull
@@ -48,7 +49,7 @@ const getRoleInfo = async () => {
             validate: validateSalary
         },
         {
-            name: 'department',
+            name: 'departmentId',
             message: 'Which department does the role belong to?',
             type: 'list',
             choices: showDeptList
@@ -56,12 +57,12 @@ const getRoleInfo = async () => {
     ]);
 
     const {
-        roleName,
+        title,
         salary,
-        department
+        departmentId
     } = response;
 
-    await addRole(roleName, salary, department);
+    await addRole(title, salary, departmentId);
 }
 
 // Function to ask for employee information
