@@ -1,18 +1,7 @@
 // Require statements for functionality in this file
 const inquirer = require('inquirer');
 
-const {
-    viewDepartments,
-    viewRoles,
-    viewEmployees,
-    addDepartment,
-    showDeptList,
-    addRole,
-    showRoleList,
-    showEmployeeList,
-    addEmployee,
-    updateEmployeeRole,
-} = require('./queries.js');
+const db = require('./queries.js');
 
 const {
     validateNotNull,
@@ -30,7 +19,7 @@ const getDepartmentInfo = async () => {
         }
     ]);
     const { deptName } = response;
-    await addDepartment(deptName);
+    await db.addDepartment(deptName);
 }
 
 // Function to ask for role information
@@ -52,7 +41,7 @@ const getRoleInfo = async () => {
             name: 'departmentId',
             message: 'Which department does the role belong to?',
             type: 'list',
-            choices: showDeptList
+            choices: db.showDeptList
         }
     ]);
 
@@ -62,7 +51,7 @@ const getRoleInfo = async () => {
         departmentId
     } = response;
 
-    await addRole(title, salary, departmentId);
+    await db.addRole(title, salary, departmentId);
 }
 
 // Function to ask for employee information
@@ -84,13 +73,13 @@ const getEmployeeInfo = async () => {
             name: 'role',
             message: 'Which role does the employee hold?',
             type: 'list',
-            choices: showRoleList
+            choices: db.showRoleList
         },
         {
             name: 'manager',
             message: 'Who is their manager?',
             type: 'list',
-            choices: showEmployeeList
+            choices: db.showEmployeeList
         }
     ]);
 
@@ -101,7 +90,7 @@ const getEmployeeInfo = async () => {
         manager
     } = response;
 
-    await addEmployee(firstName, lastName, role, manager);
+    await db.addEmployee(firstName, lastName, role, manager);
 }
 
 // Function to ask which employee's role to update
@@ -111,13 +100,13 @@ const showEmployeeChoices = async () => {
             name: 'employeeId',
             message: "Which employee's role do you want to update?",
             type: 'list',
-            choices: showEmployeeList
+            choices: db.showEmployeeList
         },
         {
             name: 'roleId',
             message: 'Which role do you want to assign to the selected employee?',
             type: 'list',
-            choices: showRoleList
+            choices: db.showRoleList
         }
     ]);
     
@@ -126,7 +115,7 @@ const showEmployeeChoices = async () => {
         roleId
     } = response;
     
-    await updateEmployeeRole(employeeId, roleId);
+    await db.updateEmployeeRole(employeeId, roleId);
 }
 
 // Function to initialize app with question prompt
@@ -171,13 +160,13 @@ const init = async () => {
 
     switch (response.action) {
         case 'viewDepartments':
-            await viewDepartments();
+            await db.viewDepartments();
             break;
         case 'viewRoles':
-            await viewRoles();
+            await db.viewRoles();
             break;
         case 'viewEmployees':
-            await viewEmployees();
+            await db.viewEmployees();
             break;
         case 'addDepartment':
             await getDepartmentInfo();
