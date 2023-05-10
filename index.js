@@ -164,6 +164,10 @@ const init = async () => {
                 {
                     name: 'Update an employee role',
                     value: 'updateEmpRole'
+                },
+                {
+                    name: 'Exit application',
+                    value: 'exit'
                 }
             ]
         }
@@ -191,6 +195,8 @@ const init = async () => {
         case 'updateEmpRole':
             await showEmployeeChoices();
             break;
+        case 'exit':
+            process.exit();
     }
     init();
 }
